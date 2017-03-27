@@ -32,4 +32,3 @@ def page_searching(request, resource):
         return HttpResponse('<h1>Page added successfully.')
     else:
         return HttpResponse('<h1>Invalid method.</h1>')
-
