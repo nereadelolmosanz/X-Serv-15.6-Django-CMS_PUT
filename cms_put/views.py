@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound
 from models import Pages
-
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -18,17 +18,30 @@ def main_page(request):
     return HttpResponse(response)
 
 
+@csrf_exempt
 def page_searching(request, resource):
+    cont_type = "text/html"
 
     if request.method == 'GET':
         try:
+            response = ""
+
+            if resource == 'about':
+                response +=  '<link rel="stylesheet" href="http://localhost:1234/css/main.css">'
+            if resource == 'css/main.css':
+                cont_type = "text/css"
+
             pageSearched = Pages.objects.get(name=resource)
-            return HttpResponse(pageSearched.page)
+            response += pageSearched.page
+            return HttpResponse(response,content_type=cont_type)
+
         except Pages.DoesNotExist:
             return HttpResponseNotFound('<h1>' + resource + ' not found.</h1>')
-    elif request.method == 'PUT' or request.method == 'POST':
+
+    elif request.method == 'POST':
         newPage = Pages(name=resource, page=request.body)
-        newPage.objects.save()
-        return HttpResponse('<h1>Page added successfully.')
+        newPage.save()
+        return HttpResponse('<h1>Page added successfully.</h1>')
+
     else:
         return HttpResponse('<h1>Invalid method.</h1>')

@@ -16,7 +16,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^$', 'cms_put.views.main_page',),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', 'cms_put.views.main_page',),
     url(r'(.+)', 'cms_put.views.page_searching',),
 ]
