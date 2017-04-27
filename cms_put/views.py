@@ -24,15 +24,12 @@ def page_searching(request, resource):
 
     if request.method == 'GET':
         try:
-            response = ""
-
-            if resource == 'about':
-                response +=  '<link rel="stylesheet" href="http://localhost:1234/css/main.css">'
+			#Para asegurar que el navegador aplica la hoja de estilos
             if resource == 'css/main.css':
                 cont_type = "text/css"
 
             pageSearched = Pages.objects.get(name=resource)
-            response += pageSearched.page
+            response = pageSearched.page
             return HttpResponse(response,content_type=cont_type)
 
         except Pages.DoesNotExist:
